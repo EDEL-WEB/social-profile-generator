@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+}
+h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: blue;
+}
+
+
+body.light-mode {
+    background: url('images/light-mode-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #000;
+}
+
+
+body.dark-mode {
+    background: url('images/dark-mode-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+}
+
+
+.toggle-button {
+    position: central;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: blue;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    
+}
+
+.toggle-button:hover {
+    background-color: #555;
+}
+
+.search-container {
+    margin: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.search-container input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+}
+
+.search-container button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #0056b3;
+}
+
+
+#profile-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 300px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    
+}
+
+body.dark-mode .profile-card {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.profile-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.profile-bio {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.profile-email {
+    font-size: 14px;
+    color: #007bff;
+}
