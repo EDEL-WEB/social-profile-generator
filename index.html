@@ -10,7 +10,7 @@
     <h1>GENERATE A USER PROFILE</h1>
 
     
-    <button class="toggle-button" onclick="toggleMode()">Toggle Mode</button>
+    <button class="toggle-button">Toggle Mode</button>
 
     
     <div class="search-container">
@@ -19,9 +19,16 @@
     </div>
 
     
-    <div id="profile-list">
-        
-    </div>
+    <form id="profileForm">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="bio" placeholder="Bio">
+        <input type="url" id="picture" placeholder="Profile Picture URL">
+        <button type="submit">Add Profile</button>
+    </form>
+
+    
+    <div id="profile-list"></div>
 
     <script src="index.js"></script>
 </body>

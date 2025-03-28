@@ -3,62 +3,56 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.getElementById("searchInput");
     const filterBtn = document.getElementById("filterBtn");
     const toggleButton = document.querySelector(".toggle-button");
+    const profileForm = document.getElementById("profileForm");
 
-    if (!profileList || !searchInput || !filterBtn || !toggleButton) {
-        console.error("One or more elements not found! Check your HTML.");
-        return;
-    }
+    const API_URL = "https://randomuser.me/api/?results=5";
+    const LOCAL_API = "http://localhost:3001/profiles"; 
 
-    // Toggle Light/Dark Mode
+    
     function toggleMode() {
         document.body.classList.toggle("dark-mode");
     }
     toggleButton.addEventListener("click", toggleMode);
 
-    // API URLs
-    const jsonServerURL = "https://your-json-server.onrender.com/profiles"; 
-    const randomUserAPI = "https://randomuser.me/api/?results=5";
-
-    // Fetch Data from Both Sources
+    
     async function fetchProfiles() {
         try {
-            const [jsonResponse, randomResponse] = await Promise.all([
-                fetch(jsonServerURL).then(res => res.json()), 
-                fetch(randomUserAPI).then(res => res.json())
-            ]);
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            const profiles = data.results.map(user => ({
+                id: user.login.uuid,
+                name: `${user.name.first} ${user.name.last}`,
+                email: user.email,
+                bio: "Generated user from API",
+                picture: user.picture.medium
+            }));
 
-            // Merge Data from Both Sources
-            const allProfiles = [...jsonResponse, ...randomResponse.results];
-            displayProfiles(allProfiles);
+            displayProfiles(profiles);
         } catch (error) {
             console.error("Error fetching profiles:", error);
         }
     }
 
+    
     function displayProfiles(profiles) {
         profileList.innerHTML = "";
         profiles.forEach(profile => {
             const profileCard = document.createElement("div");
             profileCard.classList.add("profile-card");
 
-            // Handle different data structures from JSON vs API
-            const name = profile.name ? `${profile.name.first} ${profile.name.last}` : profile.fullName;
-            const email = profile.email;
-            const image = profile.picture ? profile.picture.medium : profile.profilePic;
-            const bio = profile.bio || "Enthusiastic individual passionate about social media.";
-
             profileCard.innerHTML = `
-                <img src="${image}" alt="Profile Picture">
-                <h3>${name}</h3>
-                <p>Email: ${email}</p>
-                <p>Bio: ${bio}</p>
+                <img src="${profile.picture || "https://via.placeholder.com/80"}" alt="Profile Picture">
+                <h3>${profile.name}</h3>
+                <p>Email: ${profile.email}</p>
+                <p>Bio: ${profile.bio}</p>
             `;
+
             profileList.appendChild(profileCard);
         });
     }
 
-    // Search Functionality
-    searchInput.addEventListener("input", () => {
+
+    filterBtn.addEventListener("click", () => {
         const searchValue = searchInput.value.toLowerCase();
         document.querySelectorAll(".profile-card").forEach(card => {
             const name = card.querySelector("h3").textContent.toLowerCase();
@@ -66,5 +60,34 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    fetchProfiles(); // Load profiles on page load
+    
+    profileForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const bio = document.getElementById("bio").value || "No bio available";
+        const picture = document.getElementById("picture").value || "https://via.placeholder.com/80";
+
+        const newProfile = { name, email, bio, picture };
+
+        try {
+            const response = await fetch(LOCAL_API, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newProfile)
+            });
+
+            if (response.ok) {
+                console.log("Profile added successfully!");
+                fetchProfiles(); 
+                profileForm.reset();
+            } else {
+                console.error("Error adding profile:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
+
+    fetchProfiles();
 });
