@@ -69,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Handle form submission (Add new profile)
     profileForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -112,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Fetch jobs
+    
     async function fetchJobs() {
         jobContainer.innerHTML = "<p>Loading jobs...</p>";
         try {
@@ -129,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Display jobs
+    
     function displayJobs(jobs) {
         jobContainer.innerHTML = "";
         jobs.forEach(job => {
@@ -146,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Search & Filter profiles
+    
     filterBtn.addEventListener("click", () => {
         const searchValue = searchInput.value.toLowerCase();
         document.querySelectorAll(".profile-card").forEach(card => {
@@ -156,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Load profiles and jobs on page load
+    
     fetchProfiles();
     fetchJobs();
 });
