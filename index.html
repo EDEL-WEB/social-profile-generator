@@ -3,32 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Profile</title>
+    <title>Job Application Portal</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+
 </head>
 <body class="light-mode">
-    <h1>GENERATE A USER PROFILE</h1>
 
-    
-    <button class="toggle-button">Toggle Mode</button>
+    <header>
+        <h1>Job Application Portal</h1>
+        <button class="toggle-button">Toggle Mode</button>
+    </header>
 
-    
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search profile name...">
-        <button id="filterBtn">Filter</button>
-    </div>
+    <main class="container">
+        <section class="search-section">
+            <input type="text" id="searchInput" placeholder="Search by name or job title...">
+            <button id="filterBtn">Filter</button>
+        </section>
 
-    
-    <form id="profileForm">
-        <input type="text" id="name" placeholder="Full Name" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="text" id="bio" placeholder="Bio">
-        <input type="url" id="picture" placeholder="Profile Picture URL">
-        <button type="submit">Add Profile</button>
-    </form>
+        <section id="form-section">
+            <h2>Submit Your Application</h2>
+            <form id="profileForm">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="text" id="jobTitle" placeholder="Job Title" required>
+                <input type="text" id="skills" placeholder="Skills (comma separated)" required>
+                <textarea id="experience" placeholder="Experience"></textarea>
+                <input type="url" id="resume" placeholder="Resume URL" required>
+                <input type="text" id="bio" placeholder="Bio">
+                <label for="profileImage">Upload Profile Picture:</label>
+                <input type="file" id="profileImage" accept="image/*">
+                <select id="applicationStatus">
+                    <option value="Pending">Pending</option>
+                    <option value="Reviewed">Reviewed</option>
+                    <option value="Accepted">Accepted</option>
+                </select>
+                <button type="submit">Submit Application</button>
+            </form>
+            
+        </section>
 
-    
-    <div id="profile-list"></div>
+        <section id="profiles">
+            <h2>Candidate Profiles</h2>
+            <div id="profile-list"></div>
+        </section>
+
+        <section id="jobs">
+            <h2>Job Listings</h2>
+            <div id="job-list"></div>
+        </section>
+    </main>
 
     <script src="index.js"></script>
 </body>
