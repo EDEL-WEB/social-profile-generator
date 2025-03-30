@@ -8,24 +8,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     
     const API_URL = "https://randomuser.me/api/?results=5"; 
-    const LOCAL_API = "http://localhost:3001/profiles"; 
+    const BACKEND_API = "https://my-app-backend-2-ymkk.onrender.com/profiles"; 
     const JOBS_API = "https://api.allorigins.win/get?url=https://arbeitnow.com/api/job-board-api";
 
-    
     toggleButton.addEventListener("click", () => {
         document.body.classList.toggle("dark-mode");
     });
 
-    
     async function fetchProfiles() {
         profileList.innerHTML = "<p>Loading profiles...</p>";
         try {
-            const [localResponse, apiResponse] = await Promise.all([
-                fetch(LOCAL_API),
+            const [backendResponse, apiResponse] = await Promise.all([
+                fetch(BACKEND_API, { mode: "cors" }),  
                 fetch(API_URL)
             ]);
 
-            const localData = await localResponse.json();
+            const backendData = await backendResponse.json();
             const apiData = await apiResponse.json();
 
             const apiProfiles = apiData.results.map(user => ({
@@ -41,14 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 picture: user.picture.medium 
             }));
 
-            displayProfiles([...localData, ...apiProfiles]);
+            displayProfiles([...backendData, ...apiProfiles]);
         } catch (error) {
             console.error("Error fetching profiles:", error);
             profileList.innerHTML = "<p>Error loading profiles.</p>";
         }
     }
 
-    
     function displayProfiles(profiles) {
         profileList.innerHTML = "";
         profiles.forEach(profile => {
@@ -97,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await fetch(LOCAL_API, {
+            const response = await fetch(BACKEND_API, { 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(newProfile)
@@ -111,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    
     async function fetchJobs() {
         jobContainer.innerHTML = "<p>Loading jobs...</p>";
         try {
@@ -128,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    
     function displayJobs(jobs) {
         jobContainer.innerHTML = "";
         jobs.forEach(job => {
@@ -145,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    
     filterBtn.addEventListener("click", () => {
         const searchValue = searchInput.value.toLowerCase();
         document.querySelectorAll(".profile-card").forEach(card => {
@@ -155,7 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    
     fetchProfiles();
     fetchJobs();
 });
