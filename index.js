@@ -6,9 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const profileForm = document.getElementById("profileForm");
     const jobContainer = document.getElementById("job-list");
 
-    
-    const API_URL = "https://randomuser.me/api/?results=5"; 
-    const BACKEND_API = "https://my-app-backend-2-ymkk.onrender.com/profiles"; 
+    const API_URL = "https://randomuser.me/api/?results=5";
+    const BACKEND_API = "https://my-app-backend-2-ymkk.onrender.com/profiles";
     const JOBS_API = "https://api.allorigins.win/get?url=https://arbeitnow.com/api/job-board-api";
 
     toggleButton.addEventListener("click", () => {
@@ -19,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
         profileList.innerHTML = "<p>Loading profiles...</p>";
         try {
             const [backendResponse, apiResponse] = await Promise.all([
-                fetch(BACKEND_API, { mode: "cors" }),  
+                fetch(BACKEND_API, { mode: "cors" }),
                 fetch(API_URL)
             ]);
 
@@ -30,13 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 id: user.login.uuid,
                 name: `${user.name.first} ${user.name.last}`,
                 email: user.email,
-                jobTitle: "Software Developer", 
-                skills: "JavaScript, HTML, CSS", 
+                jobTitle: "Software Developer",
+                skills: "JavaScript, HTML, CSS",
                 experience: "1-3 years",
                 resume: "https://example.com/resume",
                 bio: "Generated user from API",
                 applicationStatus: "Pending",
-                picture: user.picture.medium 
+                picture: user.picture.medium
             }));
 
             displayProfiles([...backendData, ...apiProfiles]);
@@ -71,41 +70,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const profileImageInput = document.getElementById("profileImage");
         const profileImageFile = profileImageInput.files[0];
-        let imageUrl = "https://via.placeholder.com/100"; 
 
-        if (profileImageFile) {
-            imageUrl = URL.createObjectURL(profileImageFile); 
-        }
-
-        const newProfile = {
-            name: document.getElementById("name").value.trim(),
-            email: document.getElementById("email").value.trim(),
-            jobTitle: document.getElementById("jobTitle").value.trim(),
-            skills: document.getElementById("skills").value.trim(),
-            experience: document.getElementById("experience").value.trim(),
-            resume: document.getElementById("resume").value.trim(),
-            applicationStatus: "Pending",
-            picture: imageUrl 
-        };
-
-        if (!newProfile.name || !newProfile.email || !newProfile.jobTitle || !newProfile.resume) {
-            alert("Please fill in all required fields!");
+        if (!profileImageFile) {
+            alert("Please upload a profile picture!");
             return;
         }
 
-        try {
-            const response = await fetch(BACKEND_API, { 
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newProfile)
-            });
+        const reader = new FileReader();
+        reader.readAsDataURL(profileImageFile);
+        reader.onload = async function () {
+            const imageUrl = reader.result; 
 
-            if (!response.ok) throw new Error("Failed to add profile");
-            fetchProfiles();
-            profileForm.reset();
-        } catch (error) {
-            console.error("Error adding profile:", error);
-        }
+            const newProfile = {
+                name: document.getElementById("name").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                jobTitle: document.getElementById("jobTitle").value.trim(),
+                skills: document.getElementById("skills").value.trim(),
+                experience: document.getElementById("experience").value.trim(),
+                resume: document.getElementById("resume").value.trim(),
+                applicationStatus: "Pending",
+                picture: imageUrl 
+            };
+
+            if (!newProfile.name || !newProfile.email || !newProfile.jobTitle || !newProfile.resume) {
+                alert("Please fill in all required fields!");
+                return;
+            }
+
+            try {
+                const response = await fetch(BACKEND_API, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newProfile)
+                });
+
+                if (!response.ok) throw new Error("Failed to add profile");
+                fetchProfiles();
+                profileForm.reset();
+            } catch (error) {
+                console.error("Error adding profile:", error);
+            }
+        };
     });
 
     async function fetchJobs() {
